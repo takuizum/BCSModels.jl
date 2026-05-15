@@ -1,0 +1,101 @@
+# Citation metadata for BCSM.jl. Format: Citation File Format 1.2.0
+# https://citation-file-format.github.io/
+#
+# Status: software citation only.
+#   * A methodology preprint (arXiv) and a software paper (JOSS) are
+#     planned. Once those exist, add their identifiers to the
+#     `references` block below and consider promoting one of them to
+#     `preferred-citation`.
+cff-version: 1.2.0
+title: "BCSM.jl: Bayesian Covariance Structure Modeling for Item Response Theory in Julia"
+message: "If you use this software, please cite it using the metadata below."
+type: software
+authors:
+  - given-names: Takumi
+    family-names: Itamiya
+    email: sep10.taku.izum@gmail.com
+    affiliation: "Dwango Co., Ltd."
+license: MIT
+repository-code: "https://github.com/sep10taku/BCSM.jl"
+abstract: >-
+  A Julia implementation of Bayesian Covariance Structure Models (BCSM)
+  for item response theory, providing both the closed-form Gibbs sampler
+  from the BCSM literature and an original mean-field coordinate-ascent
+  variational Bayes routine. Targets the IRT-BCSM (Fox, 2024) and
+  Testlet-BCSM (Fox, Wenzel & Klotzke, 2021) model families.
+keywords:
+  - Bayesian inference
+  - item response theory
+  - variational Bayes
+  - covariance structure modeling
+  - Julia
+# `preferred-citation` intentionally cites the software itself for now.
+# Replace with the arXiv preprint (after Phase 2) or the JOSS paper
+# (after Phase 3) once they exist.
+preferred-citation:
+  type: software
+  title: "BCSM.jl: Bayesian Covariance Structure Modeling for Item Response Theory in Julia"
+  authors:
+    - given-names: Takumi
+      family-names: Itamiya
+  version: "0.1.0"
+  year: 2026
+  url: "https://github.com/sep10taku/BCSM.jl"
+# Underlying methodology references (NOT yet the citation for this software).
+references:
+  - type: article
+    authors:
+      - family-names: Klotzke
+        given-names: Konrad
+      - family-names: Fox
+        given-names: Jean-Paul
+    title: "Bayesian covariance structure modeling of responses and process data"
+    journal: "Frontiers in Psychology"
+    year: 2019
+    volume: 10
+    article-number: 1675
+    doi: "10.3389/fpsyg.2019.01675"
+  - type: article
+    authors:
+      - family-names: Fox
+        given-names: Jean-Paul
+    title: "Redefining item response models for small samples"
+    journal: "Journal of Educational and Behavioral Statistics"
+    year: 2024
+    volume: 50
+    issue: 2
+    start: 272
+    end: 295
+    doi: "10.3102/10769986241269886"
+  - type: article
+    authors:
+      - family-names: Fox
+        given-names: Jean-Paul
+      - family-names: Wenzel
+        given-names: Jeremias
+      - family-names: Klotzke
+        given-names: Konrad
+    title: "The Bayesian covariance structure model for testlets"
+    journal: "Journal of Educational and Behavioral Statistics"
+    year: 2021
+    volume: 46
+    issue: 2
+    start: 219
+    end: 243
+    doi: "10.3102/1076998620941204"
+# Future entries (uncomment and fill in once available):
+# - type: article
+#   authors:
+#     - family-names: Itamiya
+#       given-names: Takumi
+#   title: "Mean-field variational Bayes for Bayesian covariance structure models of item responses"
+#   year: 20XX
+#   url: "https://arxiv.org/abs/XXXX.XXXXX"
+# - type: article
+#   authors:
+#     - family-names: Itamiya
+#       given-names: Takumi
+#   title: "BCSM.jl: A Julia package for Bayesian covariance structure modeling"
+#   journal: "Journal of Open Source Software"
+#   year: 20XX
+#   doi: "10.21105/joss.XXXXX"

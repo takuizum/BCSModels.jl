@@ -1,0 +1,15 @@
+Manifest.toml
+*.cov
+deps/deps.jl
+docs/build/
+docs/site/
+.vscode/
+.DS_Store
+data/raw/
+data/cache/
+scratch/
+*.log
+.claude/
+results/*.csv
+results/*.txt
+!results/.gitkeep
