@@ -16,7 +16,7 @@
 #
 # Outputs a CSV with one row per (model, cell, replicate, method).
 
-using BCSM
+using BCSModels
 using Random, Statistics, LinearAlgebra, Printf, Dates
 
 # -------------------- argument parsing --------------------
@@ -44,11 +44,11 @@ end
 # -------------------- IRT-BCSM grid --------------------
 function run_irt_cell(N, K, θ_true, rep, niter, burnin)
     rng_sim = MersenneTwister(rep)
-    Y, info = BCSM.simulate_irt_bcsm(rng_sim, N, K; θ_true=θ_true, σ_b=1.0)
-    model = BCSM.IRTBCSM(K=K)
+    Y, info = BCSModels.simulate_irt_bcsm(rng_sim, N, K; θ_true=θ_true, σ_b=1.0)
+    model = BCSModels.IRTBCSM(K=K)
 
     # Gibbs
-    g = BCSM.gibbs_irt_bcsm(Y, model; niter=niter, burnin=burnin,
+    g = BCSModels.gibbs_irt_bcsm(Y, model; niter=niter, burnin=burnin,
                             rng=MersenneTwister(rep + 10_000))
     θ_chain = vec(g.samples_θ)
     g_mean = mean(θ_chain)
@@ -59,7 +59,7 @@ function run_irt_cell(N, K, θ_true, rep, niter, burnin)
     g_b_rmse = sqrt(mean((g_b .- info.b) .^ 2))
 
     # CAVI
-    vb = BCSM.cavi_irt_bcsm(Y, model; maxiter=400, tol=1e-7)
+    vb = BCSModels.cavi_irt_bcsm(Y, model; maxiter=400, tol=1e-7)
     vb_sd_θ = sqrt(max(vb.v_θ[1], 0))
     vb_lo = vb.m_θ[1] - 1.96 * vb_sd_θ
     vb_hi = vb.m_θ[1] + 1.96 * vb_sd_θ
@@ -82,15 +82,15 @@ function run_testlet_cell(N, K_per, T, θ_true_vec, rep, niter, burnin)
     K = K_per * T
     testlet_of = repeat(1:T, inner=K_per)
     rng_sim = MersenneTwister(rep + 50_000)
-    Y, info = BCSM.simulate_testlet_bcsm(rng_sim, N, K;
+    Y, info = BCSModels.simulate_testlet_bcsm(rng_sim, N, K;
                                           testlet_of=testlet_of,
                                           θ_true=θ_true_vec,
                                           σ_b=1.0)
-    model = BCSM.TestletBCSM(K=K, testlet_of=testlet_of)
+    model = BCSModels.TestletBCSM(K=K, testlet_of=testlet_of)
 
-    g = BCSM.gibbs_testlet_bcsm(Y, model; niter=niter, burnin=burnin,
+    g = BCSModels.gibbs_testlet_bcsm(Y, model; niter=niter, burnin=burnin,
                                 rng=MersenneTwister(rep + 60_000))
-    vb = BCSM.cavi_testlet_bcsm(Y, model; maxiter=400, tol=1e-7)
+    vb = BCSModels.cavi_testlet_bcsm(Y, model; maxiter=400, tol=1e-7)
 
     rows = Any[]
     for t in 1:T

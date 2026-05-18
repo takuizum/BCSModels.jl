@@ -5,10 +5,22 @@
 # experiments in `scripts/sim_mcmc_vs_vb.jl`.
 
 """
-    simulate_irt_bcsm(rng, N, K; θ_true, b_true, μ_b=0.0, σ_b=1.0) -> (Y, info)
+    simulate_irt_bcsm([rng], N, K; θ_true, b_true=nothing, μ_b=0.0, σ_b=1.0)
+        -> (Y::Matrix{Int}, info::NamedTuple)
 
-Generate `N × K` binary responses under the single-layer IRT-BCSM. If `b_true`
-is `nothing`, item difficulties are sampled from `N(μ_b, σ_b²)`.
+Generate `N × K` binary responses from the single-layer probit IRT-BCSM with
+covariance `Σ = I + θ_true · 1 1ᵀ`. If `b_true` is `nothing`, item
+difficulties are drawn i.i.d. from `Normal(μ_b, σ_b²)`. The returned
+`info` NamedTuple carries the ground-truth `b`, `θ`, `K`, `N`.
+
+# Examples
+```julia
+using BCSModels, Random
+Y, info = simulate_irt_bcsm(MersenneTwister(1), 500, 10; θ_true=0.4)
+size(Y)              # (500, 10)
+info.θ               # 0.4
+info.b               # length-10 vector of true difficulties
+```
 """
 function simulate_irt_bcsm(rng::AbstractRNG, N::Int, K::Int;
                             θ_true::Float64,
@@ -27,10 +39,24 @@ simulate_irt_bcsm(N::Int, K::Int; kwargs...) =
     simulate_irt_bcsm(Random.default_rng(), N, K; kwargs...)
 
 """
-    simulate_testlet_bcsm(rng, N, K; testlet_of, θ_true, b_true, μ_b, σ_b) -> (Y, info)
+    simulate_testlet_bcsm([rng], N, K; testlet_of, θ_true, b_true=nothing,
+                          μ_b=0.0, σ_b=1.0) -> (Y, info)
 
-Generate `N × K` binary responses under the disjoint-testlet BCSM with the
-given testlet assignment and per-testlet covariance components `θ_true`.
+Generate `N × K` binary responses under the disjoint-testlet probit BCSM
+with covariance `Σ = I + Σ_t θ_true[t] · u_t u_tᵀ`, where `u_t` is the binary
+indicator of testlet `t`. `testlet_of[j]` gives the testlet that item `j`
+belongs to (1-based).
+
+# Examples
+```julia
+using BCSModels, Random
+testlet_of = repeat(1:3, inner=4)             # 12 items, 3 testlets of size 4
+θ_true = [0.3, 0.5, 0.2]
+Y, info = simulate_testlet_bcsm(MersenneTwister(2), 600, 12;
+                                testlet_of=testlet_of, θ_true=θ_true)
+size(Y)              # (600, 12)
+info.θ               # [0.3, 0.5, 0.2]
+```
 """
 function simulate_testlet_bcsm(rng::AbstractRNG, N::Int, K::Int;
                                 testlet_of::AbstractVector{<:Integer},

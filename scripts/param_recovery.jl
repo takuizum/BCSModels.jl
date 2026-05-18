@@ -1,4 +1,4 @@
-# Parameter-recovery simulation for BCSM.
+# Parameter-recovery simulation for BCSModels.
 #
 # Vary sample size N and number of items K on a grid. For each cell, draw
 # `reps` independent data sets from the data-generating BCSM, fit both the
@@ -22,7 +22,7 @@
 # The output CSV has one row per (cell, replicate, method) and is consumed
 # by scripts/analyze_recovery.jl to produce the summary tables.
 
-using BCSM
+using BCSModels
 using Random, Statistics, LinearAlgebra, Printf, Dates
 
 # ─────────────────────────── argument parsing ─────────────────────────── #
@@ -110,12 +110,12 @@ end
 
 function run_irt(N, K, θ_true, rep, niter, burnin, master_seed)
     rng_data = MersenneTwister(hash((:irt, N, K, θ_true, rep, master_seed)))
-    Y, info = BCSM.simulate_irt_bcsm(rng_data, N, K; θ_true=θ_true, σ_b=1.0)
-    model = BCSM.IRTBCSM(K=K)
+    Y, info = BCSModels.simulate_irt_bcsm(rng_data, N, K; θ_true=θ_true, σ_b=1.0)
+    model = BCSModels.IRTBCSM(K=K)
 
     # Gibbs
     rng_g = MersenneTwister(hash((:irt_gibbs, N, K, θ_true, rep, master_seed)))
-    g = BCSM.gibbs_irt_bcsm(Y, model; niter=niter, burnin=burnin, rng=rng_g)
+    g = BCSModels.gibbs_irt_bcsm(Y, model; niter=niter, burnin=burnin, rng=rng_g)
     θ_chain = vec(g.samples_θ)
     g_est = mean(θ_chain); g_sd = std(θ_chain)
     g_lo, g_hi = quantile(θ_chain, (0.025, 0.975))
@@ -129,7 +129,7 @@ function run_irt(N, K, θ_true, rep, niter, burnin, master_seed)
     g_b_cover = b_coverage(g.samples_b, info.b)
 
     # CAVI
-    vb = BCSM.cavi_irt_bcsm(Y, model; maxiter=400, tol=1e-7)
+    vb = BCSModels.cavi_irt_bcsm(Y, model; maxiter=400, tol=1e-7)
     v_sd = sqrt(max(vb.v_θ[1], 0))
     v_lo, v_hi = vb.m_θ[1] - 1.96 * v_sd, vb.m_θ[1] + 1.96 * v_sd
     v_cover = (v_lo ≤ θ_true ≤ v_hi) ? 1 : 0
@@ -156,14 +156,14 @@ function run_testlet(N, K_per, T, θ_true_vec, rep, niter, burnin, master_seed)
     K = K_per * T
     testlet_of = repeat(1:T, inner=K_per)
     rng_data = MersenneTwister(hash((:tlt, N, K, T, rep, master_seed)))
-    Y, info = BCSM.simulate_testlet_bcsm(rng_data, N, K;
+    Y, info = BCSModels.simulate_testlet_bcsm(rng_data, N, K;
                                           testlet_of=testlet_of,
                                           θ_true=θ_true_vec, σ_b=1.0)
-    model = BCSM.TestletBCSM(K=K, testlet_of=testlet_of)
+    model = BCSModels.TestletBCSM(K=K, testlet_of=testlet_of)
 
     rng_g = MersenneTwister(hash((:tlt_gibbs, N, K, T, rep, master_seed)))
-    g = BCSM.gibbs_testlet_bcsm(Y, model; niter=niter, burnin=burnin, rng=rng_g)
-    vb = BCSM.cavi_testlet_bcsm(Y, model; maxiter=400, tol=1e-7)
+    g = BCSModels.gibbs_testlet_bcsm(Y, model; niter=niter, burnin=burnin, rng=rng_g)
+    vb = BCSModels.cavi_testlet_bcsm(Y, model; maxiter=400, tol=1e-7)
 
     g_b_post = vec(mean(g.samples_b, dims=1))
     g_b_rmse = sqrt(mean((g_b_post .- info.b) .^ 2))

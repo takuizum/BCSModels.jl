@@ -22,10 +22,33 @@ struct VBResult
 end
 
 """
-    cavi_irt_bcsm(Y, model; maxiter, tol, rng, verbose) -> VBResult
+    cavi_irt_bcsm(Y, model; maxiter=200, tol=1e-5, rng=Random.default_rng(), verbose=false) -> VBResult
 
-Run the mean-field CAVI for the IRT-BCSM. Returns variational means and
-variances of all parameters and the ELBO trajectory.
+Run the mean-field coordinate-ascent variational Bayes routine for the
+[`IRTBCSM`](@ref) model on an `N × K` binary response matrix `Y`. Returns
+a [`VBResult`](@ref) holding the variational means and variances of all
+parameters and the ELBO trajectory.
+
+The variational family is
+`q(z, b, θ) = ∏_{i,j} q(z_{ij}) · ∏_j q(b_j) · q(θ)` with truncated-normal,
+Gaussian, and inverse-gamma marginals respectively. The `q(z)` and `q(b)`
+updates use the plug-in `E_q[Λ] ≈ Σ⁻¹(E_q[θ])`; the `q(θ)` update is
+exact closed form. Empirically the CAVI runs ~10–20× faster than the Gibbs
+sampler but underestimates the posterior SD of `θ` (see
+`docs/mcmc_vs_vb.md`).
+
+# Examples
+```julia
+using BCSModels, Random
+Y, info = simulate_irt_bcsm(MersenneTwister(3), 500, 10; θ_true=0.4)
+vb = cavi_irt_bcsm(Y, IRTBCSM(K=10); maxiter=400, tol=1e-7)
+vb.m_θ[1]                    # variational mean of θ
+sqrt(vb.v_θ[1])              # variational SD of θ (under-disperses)
+vb.elbo[end] - vb.elbo[1]    # ELBO improvement
+```
+
+See also [`gibbs_irt_bcsm`](@ref) for the MCMC reference and
+[`cavi_testlet_bcsm`](@ref) for the multi-layer variant.
 """
 function cavi_irt_bcsm(Y::AbstractMatrix{<:Integer},
                        model::IRTBCSM;

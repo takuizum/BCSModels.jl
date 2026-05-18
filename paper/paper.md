@@ -1,5 +1,5 @@
 ---
-title: 'BCSM.jl: A Julia package for Bayesian covariance structure modeling of item response data'
+title: 'BCSModels.jl: A Julia package for Bayesian covariance structure modeling of item response data'
 tags:
   - Julia
   - Bayesian inference
@@ -20,7 +20,7 @@ bibliography: paper.bib
 
 # Summary
 
-`BCSM.jl` is a Julia package for fitting Bayesian Covariance Structure
+`BCSModels.jl` is a Julia package for fitting Bayesian Covariance Structure
 Models (BCSM) to binary item-response data. BCSM, developed by Fox, Mulder,
 Klotzke and collaborators [@klotzke_fox_2019_responses; @fox2024;
 @fox_wenzel_klotzke_2021], reformulates the marginal covariance of
@@ -69,7 +69,7 @@ follow:
    variational family does not exploit the additive-covariance structure
    that defines BCSM.
 
-`BCSM.jl` fills both gaps. The package provides the canonical Gibbs
+`BCSModels.jl` fills both gaps. The package provides the canonical Gibbs
 sampler with the algebraic simplifications afforded by the disjoint
 binary indicator $\mathbf{u}_t$ — the rank-one layer is an eigenvector
 of the rest of the covariance with eigenvalue one, which collapses the

@@ -1,11 +1,11 @@
-# BCSM.jl
+# BCSModels.jl
 
-[![CI](https://github.com/sep10taku/BCSM.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/sep10taku/BCSM.jl/actions/workflows/CI.yml)
-[![codecov](https://codecov.io/gh/sep10taku/BCSM.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/sep10taku/BCSM.jl)
+[![CI](https://github.com/sep10taku/BCSModels.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/sep10taku/BCSModels.jl/actions/workflows/CI.yml)
+[![codecov](https://codecov.io/gh/sep10taku/BCSModels.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/sep10taku/BCSModels.jl)
 [![Julia ≥ 1.10](https://img.shields.io/badge/Julia-%E2%89%A5%201.10-9558B2.svg?logo=julia&logoColor=white)](https://julialang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> Replace `sep10taku/BCSM.jl` in the badge URLs above with your actual
+> Replace `sep10taku/BCSModels.jl` in the badge URLs above with your actual
 > GitHub user / repository slug before pushing.
 
 **Bayesian Covariance Structure Modeling for Item Response Theory in Julia.**
@@ -14,6 +14,53 @@ Julia implementation of Bayesian Covariance Structure Models (BCSM) developed by
 Mulder, Klotzke and colleagues, with a focus on IRT applications. The package provides
 both the classical Gibbs sampler used in the literature and an original mean-field
 variational Bayes (CAVI) inference routine derived for this project.
+
+## 30-second tour
+
+```julia
+using BCSModels, Random, Statistics
+
+# 1. Simulate 500 respondents × 10 items from the single-layer IRT-BCSM
+#    with covariance Σ = I + θ_true · 1 1ᵀ.
+Y, info = simulate_irt_bcsm(MersenneTwister(1), 500, 10; θ_true=0.4)
+
+# 2. Fit the same model via MCMC (closed-form Gibbs from the BCSM literature)
+#    and via mean-field CAVI (this package's original contribution).
+model = IRTBCSM(K=10)
+gibbs = gibbs_irt_bcsm(Y, model; niter=1500, burnin=500)
+vb    = cavi_irt_bcsm(Y, model; maxiter=400, tol=1e-7)
+
+# 3. Compare the posterior of θ.
+mean(gibbs.samples_θ)   # ≈ 0.4    (truth)
+vb.m_θ[1]               # variational mean (under-disperses, see docs/mcmc_vs_vb.md)
+```
+
+Multi-testlet BCSM is one extra constructor:
+
+```julia
+testlet_of = repeat(1:3, inner=4)   # 12 items split into 3 testlets of size 4
+Y, info = simulate_testlet_bcsm(MersenneTwister(2), 600, 12;
+                                 testlet_of=testlet_of,
+                                 θ_true=[0.3, 0.5, 0.2])
+model = TestletBCSM(K=12, testlet_of=testlet_of)
+gibbs_testlet_bcsm(Y, model; niter=1500, burnin=500).samples_θ |> x -> mean(x, dims=1)
+```
+
+## Why BCSM in one paragraph
+
+A hierarchical IRT model with random person or testlet effects induces a marginal
+covariance among the item-response utilities once the random effects are integrated
+out. **BCSM places the prior directly on that marginal covariance:**
+
+> Σ  =  Σ₀  +  ∑ₜ θₜ uₜ uₜᵀ
+
+where each `uₜ` is a known binary item-grouping indicator (e.g. testlet membership)
+and each `θₜ ∈ ℝ` is a covariance component. Allowing `θₜ < 0` admits dependence
+patterns that the random-effects formulation cannot represent. With a
+truncated-shifted-inverse-gamma prior on each `θₜ`, the conditional posteriors are
+all closed form, enabling both a fast Gibbs sampler and (this package's
+contribution) a closed-form mean-field CAVI. See [`docs/theory.md`](docs/theory.md)
+for the full derivation.
 
 ## Scope
 
@@ -31,25 +78,11 @@ For each model, the package provides:
   using Albert–Chib probit augmentation.
 - Posterior summary, model fit, and diagnostic utilities.
 
-## Why BCSM?
-
-A latent random effect `b ~ N(0, D)` in a hierarchical IRT model induces a marginal
-covariance structure on responses. BCSM models that covariance directly,
-
-```
-Σ = Σ₀ + Σₜ θₜ uₜ uₜᵀ
-```
-
-where each layer `t` corresponds to an item grouping (testlet, group, response
-type). Truncated shifted inverse-gamma priors guarantee positive definiteness via a
-Sherman–Morrison condition while admitting negative covariance components. The
-conditional posteriors are closed form, enabling fast Gibbs and a tractable CAVI.
-
 ## Layout
 
 ```
 src/
-  BCSM.jl                 # package entrypoint
+  BCSModels.jl                 # package entrypoint
   distributions/          # truncated shifted inverse-gamma, helpers
   covariance/             # additive covariance struct + rank-1 updates
   models/
@@ -82,16 +115,16 @@ Once registered in the Julia General registry:
 
 ```julia
 using Pkg
-Pkg.add("BCSM")
+Pkg.add("BCSModels")
 ```
 
 Until then (or to develop the package locally):
 
 ```julia
 using Pkg
-Pkg.add(url="https://github.com/sep10taku/BCSM.jl")          # from GitHub
+Pkg.add(url="https://github.com/sep10taku/BCSModels.jl")          # from GitHub
 # or, for a local checkout:
-Pkg.develop(path="/path/to/BCSM.jl")
+Pkg.develop(path="/path/to/BCSModels.jl")
 ```
 
 ## Getting started

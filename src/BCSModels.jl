@@ -14,7 +14,7 @@ The two principal model types are [`IRTBCSM`](@ref) (single covariance
 layer; Fox 2024) and [`TestletBCSM`](@ref) (one layer per testlet; Fox,
 Wenzel & Klotzke 2021). See `docs/theory.md` for the full derivation.
 """
-module BCSM
+module BCSModels
 
 using LinearAlgebra
 using Random

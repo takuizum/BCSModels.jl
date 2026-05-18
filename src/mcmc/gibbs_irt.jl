@@ -16,9 +16,40 @@ struct GibbsResult
 end
 
 """
-    gibbs_irt_bcsm(Y, model; niter=2000, burnin=1000, thin=1, rng=Random.default_rng()) -> GibbsResult
+    gibbs_irt_bcsm(Y, model; niter=2000, burnin=1000, thin=1, rng, init, verbose=false) -> GibbsResult
 
-Run the IRT-BCSM Gibbs sampler on an N × K binary response matrix `Y`.
+Run the IRT-BCSM Gibbs sampler on an `N × K` binary response matrix `Y` under
+the single-layer model [`IRTBCSM`](@ref). Returns a [`GibbsResult`](@ref)
+containing posterior samples of the item difficulties `b`, the covariance
+component `θ`, and (with the probit identification) `σ² ≡ 1`.
+
+# Arguments
+- `Y`: an `N × K` integer matrix with entries in `{0, 1}`.
+- `model::IRTBCSM`: model spec with prior hyperparameters.
+
+# Keyword arguments
+- `niter::Int = 2000`: number of post-burn-in samples kept.
+- `burnin::Int = 1000`: number of burn-in iterations.
+- `thin::Int = 1`: thinning interval.
+- `rng::AbstractRNG`: random number generator.
+- `init`: optional NamedTuple with fields `b`, `θ`, `σ²` to override the
+  default starting state.
+- `verbose::Bool = false`: print progress every 10% of iterations.
+
+# Examples
+```julia
+using BCSModels, Random
+rng    = MersenneTwister(1)
+Y, info = simulate_irt_bcsm(rng, 500, 10; θ_true=0.4, σ_b=1.0)
+model  = IRTBCSM(K=10)
+res    = gibbs_irt_bcsm(Y, model; niter=1500, burnin=500)
+
+using Statistics
+mean(res.samples_θ)   # posterior mean of θ — should be near 0.4
+```
+
+See also [`cavi_irt_bcsm`](@ref) for the variational counterpart, and
+`docs/theory.md` for the derivation of the conditional posteriors.
 """
 function gibbs_irt_bcsm(Y::AbstractMatrix{<:Integer},
                         model::IRTBCSM;

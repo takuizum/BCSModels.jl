@@ -19,7 +19,7 @@
 # code rather than hidden inside the package — the BCSM model functions are
 # generic and operate on any N × K binary matrix.
 
-using BCSM
+using BCSModels
 using Random, Statistics, LinearAlgebra, Printf
 
 function parse_args(args)
@@ -84,14 +84,14 @@ function main(args)
 
     # --- IRT-BCSM ---
     println("\n=== IRT-BCSM (single-layer) ===")
-    irt = BCSM.IRTBCSM(K=K)
-    g_irt = BCSM.gibbs_irt_bcsm(Y, irt; niter=2000, burnin=1000,
+    irt = BCSModels.IRTBCSM(K=K)
+    g_irt = BCSModels.gibbs_irt_bcsm(Y, irt; niter=2000, burnin=1000,
                                  rng=MersenneTwister(1))
     θ_post = vec(g_irt.samples_θ)
     @printf("Gibbs θ posterior: mean=%.3f  sd=%.3f  95%% CI=(%.3f, %.3f)\n",
             mean(θ_post), std(θ_post),
             quantile(θ_post, 0.025), quantile(θ_post, 0.975))
-    vb_irt = BCSM.cavi_irt_bcsm(Y, irt; maxiter=500, tol=1e-7)
+    vb_irt = BCSModels.cavi_irt_bcsm(Y, irt; maxiter=500, tol=1e-7)
     sd_θ = sqrt(max(vb_irt.v_θ[1], 0))
     @printf("CAVI  θ variational: mean=%.3f  sd=%.3f  95%% CI=(%.3f, %.3f)\n",
             vb_irt.m_θ[1], sd_θ,
@@ -104,15 +104,15 @@ function main(args)
     testlet_of = content_domain_testlets(item_codes)
     T = maximum(testlet_of)
     @info "testlet structure" T sizes=[count(==(t), testlet_of) for t in 1:T]
-    tlt = BCSM.TestletBCSM(K=K, testlet_of=testlet_of)
-    g_tlt = BCSM.gibbs_testlet_bcsm(Y, tlt; niter=2000, burnin=1000,
+    tlt = BCSModels.TestletBCSM(K=K, testlet_of=testlet_of)
+    g_tlt = BCSModels.gibbs_testlet_bcsm(Y, tlt; niter=2000, burnin=1000,
                                     rng=MersenneTwister(2))
     for t in 1:T
         ch = g_tlt.samples_θ[:, t]
         @printf("  Testlet %d: Gibbs θ=%.3f ± %.3f  CI=(%.3f, %.3f)\n",
                 t, mean(ch), std(ch), quantile(ch, 0.025), quantile(ch, 0.975))
     end
-    vb_tlt = BCSM.cavi_testlet_bcsm(Y, tlt; maxiter=500, tol=1e-7)
+    vb_tlt = BCSModels.cavi_testlet_bcsm(Y, tlt; maxiter=500, tol=1e-7)
     for t in 1:T
         sd = sqrt(max(vb_tlt.v_θ[t], 0))
         @printf("  Testlet %d: CAVI  θ=%.3f ± %.3f  CI=(%.3f, %.3f)\n",

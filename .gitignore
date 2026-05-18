@@ -13,3 +13,4 @@ scratch/
 results/*.csv
 results/*.txt
 !results/.gitkeep
+docs/Manifest.toml

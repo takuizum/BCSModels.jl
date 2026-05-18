@@ -10,9 +10,34 @@
 # where Q_t = Σ_i (u_tᵀ r_i)² with r_i = z_i + b. Layers update independently.
 
 """
-    gibbs_testlet_bcsm(Y, model; niter, burnin, thin, rng, init, verbose) -> GibbsResult
+    gibbs_testlet_bcsm(Y, model; niter=2000, burnin=1000, thin=1, rng, init, verbose=false) -> GibbsResult
 
-Gibbs sampler for the disjoint-testlet BCSM.
+Run the disjoint-testlet BCSM Gibbs sampler on an `N × K` binary response
+matrix `Y` under a [`TestletBCSM`](@ref) model. Each testlet contributes one
+rank-one layer; under disjointness, the layer updates are independent
+inverse-gammas.
+
+# Arguments / keyword arguments
+Same shape as [`gibbs_irt_bcsm`](@ref). `model` must be a `TestletBCSM` and
+its `testlet_of` vector assigns each item to exactly one testlet.
+
+# Examples
+```julia
+using BCSModels, Random
+rng = MersenneTwister(2)
+testlet_of = repeat(1:3, inner=4)   # 12 items, 3 testlets of size 4
+Y, info = simulate_testlet_bcsm(rng, 600, 12;
+                                testlet_of=testlet_of,
+                                θ_true=[0.3, 0.5, 0.2])
+model = TestletBCSM(K=12, testlet_of=testlet_of)
+res   = gibbs_testlet_bcsm(Y, model; niter=1500, burnin=500)
+
+using Statistics
+mean(res.samples_θ, dims=1)   # per-testlet posterior means
+```
+
+See also [`cavi_testlet_bcsm`](@ref) for the variational counterpart and
+[`gibbs_irt_bcsm`](@ref) for the single-layer variant.
 """
 function gibbs_testlet_bcsm(Y::AbstractMatrix{<:Integer},
                             model::TestletBCSM;

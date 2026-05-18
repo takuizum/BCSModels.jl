@@ -1,6 +1,6 @@
 # Bayesian Covariance Structure Models for Item Response Theory: Gibbs and Mean-field Variational Inference
 
-**Implementation reference for the [BCSM.jl](../README.md) Julia package.**
+**Implementation reference for the [BCSModels.jl](../README.md) Julia package.**
 
 > **Status note.** This document collects the algebra that the source code
 > implements line-by-line. A peer-reviewed treatment of the same material
@@ -54,10 +54,10 @@ The standard inference engine for BCSM is a Gibbs sampler. We re-derive it
 below. The novelty of this document is a fully closed-form mean-field
 variational counterpart, derived under the same conditional conjugacy that
 makes the Gibbs sampler tractable. Both engines are implemented in the
-companion package `BCSM.jl`.
+companion package `BCSModels.jl`.
 
 We focus on the dichotomous-response IRT setting because (i) it is the
-target application driving the design of `BCSM.jl`, and (ii) it admits the
+target application driving the design of `BCSModels.jl`, and (ii) it admits the
 Albert–Chib augmentation that lets us treat probit IRT inside a Gaussian-MVN
 framework. The polytomous case is a straightforward extension and is
 sketched in Section 9.
@@ -478,7 +478,7 @@ For applications that need posterior quantities at many parameter
 settings — e.g. cross-validation, model selection over testlet
 specifications, or large-scale screening across countries in TIMSS — a
 deterministic approximation can be useful. We derive the mean-field CAVI
-that is implemented in `BCSM.jl::cavi_irt_bcsm` / `cavi_testlet_bcsm`.
+that is implemented in `BCSModels.jl::cavi_irt_bcsm` / `cavi_testlet_bcsm`.
 
 ### 7.1 Variational family
 
@@ -863,7 +863,7 @@ output: (m_b, v_b, m_θ, v_θ, m_z, v_z, ELBO trajectory)
 | Closed-form $\theta_t$ | IG via $\psi_t = 1/c_t$ (Prop. 5.1) | tsIG (Eq. 11) | IG (Eq. 6) | not applicable |
 | Plug-in $\hat\boldsymbol{\Lambda}$ in VB | yes (§7.6) | n/a | n/a | yes, equivalent for diagonal Σ |
 | Bias diagnosis | structural, §7.7 | n/a | n/a | not discussed |
-| Reproducible code | `BCSM.jl` (this package) | R / Gibbs only | R | MATLAB / VEM only |
+| Reproducible code | `BCSModels.jl` (this package) | R / Gibbs only | R | MATLAB / VEM only |
 
 The principal contribution of this document, beyond consolidating the
 literature, is **the CAVI in §7 and the explicit identification in

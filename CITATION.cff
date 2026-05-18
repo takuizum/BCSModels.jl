@@ -1,4 +1,4 @@
-# Citation metadata for BCSM.jl. Format: Citation File Format 1.2.0
+# Citation metadata for BCSModels.jl. Format: Citation File Format 1.2.0
 # https://citation-file-format.github.io/
 #
 # Status: software citation only.
@@ -7,7 +7,7 @@
 #     `references` block below and consider promoting one of them to
 #     `preferred-citation`.
 cff-version: 1.2.0
-title: "BCSM.jl: Bayesian Covariance Structure Modeling for Item Response Theory in Julia"
+title: "BCSModels.jl: Bayesian Covariance Structure Modeling for Item Response Theory in Julia"
 message: "If you use this software, please cite it using the metadata below."
 type: software
 authors:
@@ -16,7 +16,7 @@ authors:
     email: sep10.taku.izum@gmail.com
     affiliation: "Dwango Co., Ltd."
 license: MIT
-repository-code: "https://github.com/sep10taku/BCSM.jl"
+repository-code: "https://github.com/sep10taku/BCSModels.jl"
 abstract: >-
   A Julia implementation of Bayesian Covariance Structure Models (BCSM)
   for item response theory, providing both the closed-form Gibbs sampler
@@ -34,13 +34,13 @@ keywords:
 # (after Phase 3) once they exist.
 preferred-citation:
   type: software
-  title: "BCSM.jl: Bayesian Covariance Structure Modeling for Item Response Theory in Julia"
+  title: "BCSModels.jl: Bayesian Covariance Structure Modeling for Item Response Theory in Julia"
   authors:
     - given-names: Takumi
       family-names: Itamiya
   version: "0.1.0"
   year: 2026
-  url: "https://github.com/sep10taku/BCSM.jl"
+  url: "https://github.com/sep10taku/BCSModels.jl"
 # Underlying methodology references (NOT yet the citation for this software).
 references:
   - type: article
@@ -95,7 +95,7 @@ references:
 #   authors:
 #     - family-names: Itamiya
 #       given-names: Takumi
-#   title: "BCSM.jl: A Julia package for Bayesian covariance structure modeling"
+#   title: "BCSModels.jl: A Julia package for Bayesian covariance structure modeling"
 #   journal: "Journal of Open Source Software"
 #   year: 20XX
 #   doi: "10.21105/joss.XXXXX"
