@@ -5,8 +5,6 @@
 [![Julia ≥ 1.10](https://img.shields.io/badge/Julia-%E2%89%A5%201.10-9558B2.svg?logo=julia&logoColor=white)](https://julialang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> Replace `takuizum/BCSModels.jl` in the badge URLs above with your actual
-> GitHub user / repository slug before pushing.
 
 **Bayesian Covariance Structure Modeling for Item Response Theory in Julia.**
 
@@ -137,7 +135,7 @@ julia --project=. -e 'using Pkg; Pkg.test()'    # 17 tests, ~10 s
 Example: simulate, fit, compare:
 
 ```julia
-using BCSM, Random
+using BCSModels, Random
 Y, info = simulate_irt_bcsm(MersenneTwister(1), 500, 10; θ_true=0.4)
 model   = IRTBCSM(K=10)
 gibbs   = gibbs_irt_bcsm(Y, model; niter=1500, burnin=500)
