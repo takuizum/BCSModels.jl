@@ -12,10 +12,10 @@ makedocs(;
     modules  = [BCSModels],
     authors  = "Takumi Itamiya <sep10.taku.izum@gmail.com>",
     sitename = "BCSModels.jl",
-    repo     = Remotes.GitHub("sep10taku", "BCSModels.jl"),
+    repo     = Remotes.GitHub("takuizum", "BCSModels.jl"),
     format   = Documenter.HTML(;
         prettyurls = get(ENV, "CI", "false") == "true",
-        canonical  = "https://sep10taku.github.io/BCSModels.jl",
+        canonical  = "https://takuizum.github.io/BCSModels.jl",
         edit_link  = "main",
         assets     = String[],
     ),
@@ -38,7 +38,7 @@ makedocs(;
 )
 
 deploydocs(;
-    repo   = "github.com/sep10taku/BCSModels.jl",
+    repo   = "github.com/takuizum/BCSModels.jl",
     devbranch = "main",
     push_preview = true,
 )

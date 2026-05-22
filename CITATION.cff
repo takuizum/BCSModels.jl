@@ -16,7 +16,7 @@ authors:
     email: sep10.taku.izum@gmail.com
     affiliation: "Dwango Co., Ltd."
 license: MIT
-repository-code: "https://github.com/sep10taku/BCSModels.jl"
+repository-code: "https://github.com/takuizum/BCSModels.jl"
 abstract: >-
   A Julia implementation of Bayesian Covariance Structure Models (BCSM)
   for item response theory, providing both the closed-form Gibbs sampler
@@ -40,7 +40,7 @@ preferred-citation:
       family-names: Itamiya
   version: "0.1.0"
   year: 2026
-  url: "https://github.com/sep10taku/BCSModels.jl"
+  url: "https://github.com/takuizum/BCSModels.jl"
 # Underlying methodology references (NOT yet the citation for this software).
 references:
   - type: article

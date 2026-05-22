@@ -83,6 +83,6 @@ sampler and the mean-field CAVI that this package contributes.
 
 ## Citing
 
-If you use this software, please consult [`CITATION.cff`](https://github.com/sep10taku/BCSModels.jl/blob/main/CITATION.cff).
+If you use this software, please consult [`CITATION.cff`](https://github.com/takuizum/BCSModels.jl/blob/main/CITATION.cff).
 A methodology preprint (arXiv) and a software paper (JOSS) are planned;
 update your citation accordingly once they exist.

@@ -1,11 +1,11 @@
 # BCSModels.jl
 
-[![CI](https://github.com/sep10taku/BCSModels.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/sep10taku/BCSModels.jl/actions/workflows/CI.yml)
-[![codecov](https://codecov.io/gh/sep10taku/BCSModels.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/sep10taku/BCSModels.jl)
+[![CI](https://github.com/takuizum/BCSModels.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/takuizum/BCSModels.jl/actions/workflows/CI.yml)
+[![codecov](https://codecov.io/gh/takuizum/BCSModels.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/takuizum/BCSModels.jl)
 [![Julia ≥ 1.10](https://img.shields.io/badge/Julia-%E2%89%A5%201.10-9558B2.svg?logo=julia&logoColor=white)](https://julialang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> Replace `sep10taku/BCSModels.jl` in the badge URLs above with your actual
+> Replace `takuizum/BCSModels.jl` in the badge URLs above with your actual
 > GitHub user / repository slug before pushing.
 
 **Bayesian Covariance Structure Modeling for Item Response Theory in Julia.**
@@ -122,7 +122,7 @@ Until then (or to develop the package locally):
 
 ```julia
 using Pkg
-Pkg.add(url="https://github.com/sep10taku/BCSModels.jl")          # from GitHub
+Pkg.add(url="https://github.com/takuizum/BCSModels.jl")          # from GitHub
 # or, for a local checkout:
 Pkg.develop(path="/path/to/BCSModels.jl")
 ```
