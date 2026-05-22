@@ -24,6 +24,7 @@ makedocs(;
         "Theory" => [
             "Full derivation" => "theory.md",
             "Condensed implementation note" => "derivations.md",
+            "Paper-to-code reading guide" => "reading_guide.md",
         ],
         "Experiments" => [
             "MCMC vs Variational Bayes" => "mcmc_vs_vb.md",
