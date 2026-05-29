@@ -1,7 +1,7 @@
 name = "BCSModels"
 uuid = "f94132b8-b230-45eb-9a9a-bb931a6e5561"
-authors = ["Takumi Itamiya <sep10.taku.izum@gmail.com>"]
 version = "0.1.0"
+authors = ["Takumi Itamiya <sep10.taku.izum@gmail.com>"]
 
 [deps]
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
@@ -23,7 +23,7 @@ Random = "1.10"
 SpecialFunctions = "2"
 Statistics = "1.10"
 StatsBase = "0.33, 0.34"
-StatsFuns = "1"
+StatsFuns = "1, 2"
 Test = "1.10"
 julia = "1.10"
 
